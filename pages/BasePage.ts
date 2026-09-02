@@ -3,7 +3,7 @@ import { Page, Locator, expect } from '@playwright/test';
 /** Shared helpers for every page object. Page objects hold locators + actions
  *  only — assertions live in the specs. */
 export class BasePage {
-  constructor(protected readonly page: Page) {}
+  constructor(public readonly page: Page) {}
 
   async goto(path = '/'): Promise<void> {
     // The Canonizer app's `load` event is slow/unreliable (analytics, chunks).
