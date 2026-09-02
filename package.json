@@ -1,0 +1,27 @@
+{
+  "name": "canonizer-ui-tests",
+  "version": "1.0.0",
+  "description": "End-to-end UI tests for Canonizer, built with Playwright + TypeScript.",
+  "type": "commonjs",
+  "private": true,
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "test:chromium": "playwright test --project=chromium",
+    "report": "playwright show-report",
+    "codegen": "playwright codegen $CANONIZER_BASE_URL",
+    "trace": "playwright show-trace"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/the-canonizer/canonizer-ui-tests.git"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.62.1",
+    "@types/node": "~24.0.0",
+    "dotenv": "^17.4.2",
+    "typescript": "~5.6.0"
+  }
+}

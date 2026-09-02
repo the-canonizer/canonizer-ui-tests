@@ -1,0 +1,41 @@
+name: e2e
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - run: npx playwright install --with-deps chromium
+
+      - name: Run Playwright tests
+        env:
+          CANONIZER_BASE_URL: ${{ vars.CANONIZER_BASE_URL }}
+          CANONIZER_USERNAME: ${{ secrets.CANONIZER_USERNAME }}
+          CANONIZER_PASSWORD: ${{ secrets.CANONIZER_PASSWORD }}
+        run: npx playwright test --shard=${{ matrix.shard }}/4
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report-${{ matrix.shard }}
+          path: playwright-report/
+          retention-days: 14
