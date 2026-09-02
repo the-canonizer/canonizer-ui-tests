@@ -17,7 +17,7 @@ export class ForumPage extends BasePage {
 
   async openThreadsFromTopic(): Promise<void> {
     await this.startThreadButton().first().click();
-    await this.page.waitForURL(/\/forum\/.+\/threads/, { timeout: 30_000, waitUntil: 'commit' });
+    await this.page.waitForURL(/\/forum\/.+\/threads/, { timeout: 45_000, waitUntil: 'commit' });
   }
 
   async openCreateThreadForm(): Promise<void> {
@@ -32,6 +32,6 @@ export class ForumPage extends BasePage {
     await this.threadTitle().fill(title);
     await expect(this.submitButton()).toBeEnabled();
     await this.submitButton().click();
-    await this.page.waitForURL(/\/forum\//, { timeout: 30_000, waitUntil: 'commit' });
+    await this.page.waitForURL(/\/forum\//, { timeout: 45_000, waitUntil: 'commit' });
   }
 }

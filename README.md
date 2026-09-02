@@ -61,8 +61,8 @@ npm run report                 # open the last HTML report
 | Registration | `misc_tests.py` | `registration.spec.ts` | 13 | 3 |
 | Topics | `topic_tests.py` | `topic.spec.ts` | 25 | 15 |
 | Camps | `camp_tests.py` | `camp.spec.ts` | 15 | 19 |
-| Statements | `statement_tests.py` | `statement.spec.ts` | ~11 | ~10 |
-| Forum & News | `forum_news_tests.py` | `forum-news.spec.ts` | ~18 | ~15 |
+| Statements | `statement_tests.py` | `statement.spec.ts` | 9 | 12 |
+| Forum & News | `forum_news_tests.py` | `forum-news.spec.ts` | 19 | 15 |
 | Browse & Search | `browse_search_tests.py` | `browse-search.spec.ts` | 40 | 7 |
 | Profile & Upload | `profile_upload_access_tests.py` | `profile-upload.spec.ts` | 26 | 23 |
 | Backlog (xfail) | `backlog_tests.py` | `backlog.spec.ts` | 0 | 7 |

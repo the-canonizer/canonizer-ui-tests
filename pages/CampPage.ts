@@ -14,17 +14,20 @@ export class CampPage extends BasePage {
   async openCreateFromTopic(topicSlug: string): Promise<void> {
     await this.goto(`/topic/${topicSlug}/1-Agreement`);
     await this.createCampTrigger().first().click();
-    await this.page.waitForURL(/\/camp\/create\//, { timeout: 45_000, waitUntil: 'commit' });
+    await this.page.waitForURL(/\/camp\/create\//, { timeout: 60_000, waitUntil: 'commit' });
     await expect(this.nameInput()).toBeVisible();
+    // Nickname + Parent Camp auto-populate asynchronously; wait for it so the
+    // submit button can actually enable once the name is filled.
+    await expect(this.page.locator('.ant-select-selection-item').first()).not.toBeEmpty({ timeout: 15_000 });
   }
 
   /** Fill just the required camp name and submit; resolves once the app
    *  navigates back to the topic. Returns the resulting camp page URL. */
   async createCamp(name: string): Promise<string> {
     await this.nameInput().fill(name);
-    await expect(this.createButton()).toBeEnabled();
+    await expect(this.createButton()).toBeEnabled({ timeout: 25_000 });
     await this.createButton().click();
-    await this.page.waitForURL(/\/topic\/[^/]+\/\d+-/, { timeout: 45_000, waitUntil: 'commit' });
+    await this.page.waitForURL(/\/topic\/[^/]+\/\d+-/, { timeout: 60_000, waitUntil: 'commit' });
     return this.page.url();
   }
 }

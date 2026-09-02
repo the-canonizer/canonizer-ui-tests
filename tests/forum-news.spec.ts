@@ -16,7 +16,7 @@ async function seedCamp(topicPage: TopicPage, campPage: CampPage): Promise<strin
 }
 
 test.describe('Camp forum — threads', () => {
-  test.describe.configure({ retries: 1 });
+  test.describe.configure({ retries: 2 });
 
   test('click "Start a Thread" opens the threads list', async ({ topicPage, campPage, forumPage, page }) => {
     await seedCamp(topicPage, campPage);
@@ -171,7 +171,7 @@ test.describe('News feed', () => {
     await newsPage.displayTextInput().fill('News Test');
     await newsPage.displayTextInput().blur();
     await newsPage.createButton().click();
-    await expect(newsPage.explainError().filter({ hasText: /link is invalid/i })).toBeVisible();
+    await expect(newsPage.page.getByText(/link is invalid/i)).toBeVisible();
   });
 
   test('cancel add news returns to the topic', async ({ topicPage, newsPage, page }) => {

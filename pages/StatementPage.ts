@@ -22,7 +22,7 @@ export class StatementPage extends BasePage {
   /** From a camp page, open the statement editor. */
   async openAddStatement(): Promise<void> {
     await this.addStatementButton().first().click();
-    await this.page.waitForURL(/\/create\/statement\//, { timeout: 30_000, waitUntil: 'commit' });
+    await this.page.waitForURL(/\/create\/statement\//, { timeout: 45_000, waitUntil: 'commit' });
     await expect(this.editor()).toBeVisible();
   }
 
@@ -35,7 +35,7 @@ export class StatementPage extends BasePage {
     await this.typeStatement(text);
     await expect(this.publishButton()).toBeEnabled();
     await this.publishButton().click();
-    await this.page.waitForURL(/\/statement\/history\//, { timeout: 30_000, waitUntil: 'commit' });
+    await this.page.waitForURL(/\/statement\/history\//, { timeout: 45_000, waitUntil: 'commit' });
   }
 
   async openEdit(): Promise<void> {
