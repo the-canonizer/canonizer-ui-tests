@@ -55,22 +55,37 @@ npm run report                 # open the last HTML report
 
 ## Porting status
 
-| Area | Old module | Spec | Done |
-| --- | --- | --- | --- |
-| Auth / login / logout | `auth_registration_tests.py` | `auth.spec.ts` | scaffold |
-| Footer navigation | part of `browse_search_tests.py` | `footer-nav.spec.ts` | 6/7 |
-| Registration | `misc_tests.py` | `registration.spec.ts` | — |
-| Topics | `topic_tests.py` | `topic.spec.ts` | — |
-| Camps | `camp_tests.py` | `camp.spec.ts` | — |
-| Statements | `statement_tests.py` | `statement.spec.ts` | — |
-| Forum & News | `forum_news_tests.py` | `forum-news.spec.ts` | — |
-| Browse & Search | `browse_search_tests.py` | `browse-search.spec.ts` | — |
-| Profile & Upload | `profile_upload_access_tests.py` | `profile-upload.spec.ts` | — |
-| Backlog (xfail) | `backlog_tests.py` | `backlog.spec.ts` (`test.fixme`) | — |
+| Area | Old module | Spec | Pass | `test.fixme` |
+| --- | --- | --- | --- | --- |
+| Auth / login / logout | `auth_registration_tests.py` | `auth.spec.ts` | 17 | 7 |
+| Registration | `misc_tests.py` | `registration.spec.ts` | 13 | 3 |
+| Topics | `topic_tests.py` | `topic.spec.ts` | 25 | 15 |
+| Camps | `camp_tests.py` | `camp.spec.ts` | 15 | 19 |
+| Statements | `statement_tests.py` | `statement.spec.ts` | ~11 | ~10 |
+| Forum & News | `forum_news_tests.py` | `forum-news.spec.ts` | ~18 | ~15 |
+| Browse & Search | `browse_search_tests.py` | `browse-search.spec.ts` | 40 | 7 |
+| Profile & Upload | `profile_upload_access_tests.py` | `profile-upload.spec.ts` | 26 | 23 |
+| Backlog (xfail) | `backlog_tests.py` | `backlog.spec.ts` | 0 | 7 |
 
 Cases that could not be confirmed against ux-dev during the port are marked
 `test.fixme(...)` with a note, so the count stays at parity while the selector
-or flow is sorted out.
+or flow is sorted out. Common `fixme` reasons: a feature was removed in the
+UI redesign (topic/camp preview modals, footer Jobs/Sitemap), a flow needs a
+seeded multi-version fixture (compare pages), a deep edit page still needs a
+live-DOM pass (thread/news/statement edit), or the old assertion pinned stale
+data / another account.
+
+### Running the create-heavy specs
+
+`statement.spec.ts` and `forum-news.spec.ts` (and the create half of
+`camp.spec.ts`) each chain topic → camp → statement/thread. ux-dev throttles
+under parallel entity creation, so run them at low concurrency:
+
+```sh
+npx playwright test statement forum-news --workers=2
+```
+
+They carry `retries: 1`; bump to `--retries=2` on a slow day.
 
 ## CI
 

@@ -19,11 +19,12 @@ export class CampPage extends BasePage {
   }
 
   /** Fill just the required camp name and submit; resolves once the app
-   *  navigates back to the topic. */
-  async createCamp(name: string): Promise<void> {
+   *  navigates back to the topic. Returns the resulting camp page URL. */
+  async createCamp(name: string): Promise<string> {
     await this.nameInput().fill(name);
     await expect(this.createButton()).toBeEnabled();
     await this.createButton().click();
-    await this.page.waitForURL(/\/topic\//, { timeout: 45_000, waitUntil: 'commit' });
+    await this.page.waitForURL(/\/topic\/[^/]+\/\d+-/, { timeout: 45_000, waitUntil: 'commit' });
+    return this.page.url();
   }
 }

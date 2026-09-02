@@ -5,6 +5,9 @@ import { RegistrationPage } from '../pages/RegistrationPage';
 import { ForgotPasswordPage } from '../pages/ForgotPasswordPage';
 import { TopicPage } from '../pages/TopicPage';
 import { CampPage } from '../pages/CampPage';
+import { StatementPage } from '../pages/StatementPage';
+import { ForumPage } from '../pages/ForumPage';
+import { NewsPage } from '../pages/NewsPage';
 
 /** Extend the base test with a page object per area. Add new ones here as the
  *  port progresses (CampPage, StatementPage, ...). */
@@ -15,6 +18,9 @@ type Pages = {
   forgotPasswordPage: ForgotPasswordPage;
   topicPage: TopicPage;
   campPage: CampPage;
+  statementPage: StatementPage;
+  forumPage: ForumPage;
+  newsPage: NewsPage;
 };
 
 export const test = base.extend<Pages>({
@@ -35,6 +41,15 @@ export const test = base.extend<Pages>({
   },
   campPage: async ({ page }, use) => {
     await use(new CampPage(page));
+  },
+  statementPage: async ({ page }, use) => {
+    await use(new StatementPage(page));
+  },
+  forumPage: async ({ page }, use) => {
+    await use(new ForumPage(page));
+  },
+  newsPage: async ({ page }, use) => {
+    await use(new NewsPage(page));
   },
 });
 
