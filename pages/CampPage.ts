@@ -5,8 +5,7 @@ import { BasePage } from './BasePage';
  *  "Create Camp" button, which routes to /camp/create/<slug>/1-Agreement. */
 export class CampPage extends BasePage {
   readonly nameInput = (): Locator => this.page.locator('#create_new_camp_camp_name');
-  readonly nameError = (): Locator =>
-    this.page.getByText(/please enter camp name/i).or(this.page.locator('#create_new_camp_camp_name_help'));
+  readonly nameError = (): Locator => this.page.locator('#create_new_camp_camp_name_help');
   readonly createButton = (): Locator => this.page.locator('#create-camp-btn');
   readonly discardButton = (): Locator => this.page.locator('#cancel-btn');
   readonly requiredMarks = (): Locator => this.page.locator('span.required');
@@ -15,7 +14,7 @@ export class CampPage extends BasePage {
   async openCreateFromTopic(topicSlug: string): Promise<void> {
     await this.goto(`/topic/${topicSlug}/1-Agreement`);
     await this.createCampTrigger().first().click();
-    await this.page.waitForURL(/\/camp\/create\//, { timeout: 20_000, waitUntil: 'commit' });
+    await this.page.waitForURL(/\/camp\/create\//, { timeout: 45_000, waitUntil: 'commit' });
     await expect(this.nameInput()).toBeVisible();
   }
 
@@ -25,6 +24,6 @@ export class CampPage extends BasePage {
     await this.nameInput().fill(name);
     await expect(this.createButton()).toBeEnabled();
     await this.createButton().click();
-    await this.page.waitForURL(/\/topic\//, { timeout: 30_000, waitUntil: 'commit' });
+    await this.page.waitForURL(/\/topic\//, { timeout: 45_000, waitUntil: 'commit' });
   }
 }

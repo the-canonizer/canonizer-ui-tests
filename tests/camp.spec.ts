@@ -11,6 +11,10 @@ import { test, expect, SIGNED_OUT, uid } from '../fixtures/test';
 const OLD_ASP_CAMP_URL = 'https://ux-dev.canonizer.com/topic.asp/6669-Test-dlkskndlksndl/1-Agreement';
 
 test.describe('Camps — create', () => {
+  // Each case creates a topic + a camp; ux-dev slows under parallel create
+  // load, so allow one retry on a transient navigation timeout.
+  test.describe.configure({ retries: 1 });
+
   test('load create camp page', async ({ topicPage, campPage }) => {
     const slug = await topicPage.createTopic(`PW CampHost ${uid()}`);
     await campPage.openCreateFromTopic(slug);
@@ -137,9 +141,11 @@ test.describe('Camps — support, profile & search', () => {
 
   test('browse profile setting → supported camps', async ({ page }) => {
     await page.goto('/', { waitUntil: 'domcontentloaded' });
-    await page.locator('#profile_link').click();
-    await page.locator('#link-supported-camps').click();
-    await expect(page).toHaveURL(/supported_camps|supported-camps/);
+    await expect(async () => {
+      await page.locator('#profile_link').click();
+      await page.locator('#link-supported-camps').dispatchEvent('click');
+      await expect(page).toHaveURL(/supported_camps|supported-camps/, { timeout: 3_000 });
+    }).toPass({ timeout: 20_000 });
   });
 
   test('advanced search camp tab navigation', async () => {

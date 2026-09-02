@@ -33,7 +33,7 @@ export class TopicPage extends BasePage {
     await this.nameInput().fill(name);
     await expect(this.saveButton()).toBeEnabled();
     await this.saveButton().click();
-    await this.page.waitForURL(/\/topic\/[^/]+\/1-Agreement/, { timeout: 30_000, waitUntil: 'commit' });
+    await this.page.waitForURL(/\/topic\/[^/]+\/1-Agreement/, { timeout: 45_000, waitUntil: 'commit' });
     const m = this.page.url().match(/\/topic\/([^/]+)\/1-Agreement/);
     if (!m) throw new Error(`Unexpected post-create URL: ${this.page.url()}`);
     return m[1];
