@@ -93,12 +93,20 @@ npx playwright install chromium   # ~150 MB browser download, cached in ~/Librar
 | Script | What it does |
 | --- | --- |
 | `npm test` | `playwright test` — whole suite |
-| `npm run test:headed` | same, with a visible browser |
+| `npm run test:light` | everything **except** the `@create` groups — full parallel, safe on a slow environment |
+| `npm run test:create` | only the `@create` groups (topic→camp→statement / thread / news chains) — `--workers=1 --retries=2` |
+| `npm run test:headed` | whole suite, visible browser |
 | `npm run test:ui` | Playwright **UI mode** — watch mode + time-travel debugger |
 | `npm run test:chromium` | only the `chromium` project |
 | `npm run report` | open the last HTML report |
 | `npm run codegen` | `playwright codegen $CANONIZER_BASE_URL` — record a new test by clicking |
 | `npm run trace` | `playwright show-trace` — open a saved `trace.zip` |
+
+> **On a loaded/slow environment**, run `npm run test:light` then `npm run test:create`
+> instead of `npm test`. The `@create` groups each POST a topic + camp + statement
+> in sequence; ux-dev frequently can't sustain several of those in parallel and the
+> creates time out. Serialising them (one worker, extra retries) is the reliable
+> path. CI's 4-way shard already keeps per-shard concurrency low.
 
 ---
 

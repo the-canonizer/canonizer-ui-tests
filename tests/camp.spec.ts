@@ -10,7 +10,7 @@ import { test, expect, SIGNED_OUT, uid } from '../fixtures/test';
 
 const OLD_ASP_CAMP_URL = 'https://ux-dev.canonizer.com/topic.asp/6669-Test-dlkskndlksndl/1-Agreement';
 
-test.describe('Camps — create', () => {
+test.describe('Camps — create', { tag: '@create' }, () => {
   // Each case creates a topic + a camp; ux-dev slows under parallel create
   // load, so allow one retry on a transient navigation timeout.
   test.describe.configure({ retries: 1 });

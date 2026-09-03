@@ -9,6 +9,8 @@
     "test:headed": "playwright test --headed",
     "test:ui": "playwright test --ui",
     "test:chromium": "playwright test --project=chromium",
+    "test:light": "playwright test --grep-invert @create",
+    "test:create": "playwright test --grep @create --workers=1 --retries=2",
     "report": "playwright show-report",
     "codegen": "playwright codegen $CANONIZER_BASE_URL",
     "trace": "playwright show-trace"

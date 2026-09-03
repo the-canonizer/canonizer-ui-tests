@@ -15,7 +15,7 @@ async function seedCamp(topicPage: TopicPage, campPage: CampPage): Promise<strin
   return slug;
 }
 
-test.describe('Camp forum — threads', () => {
+test.describe('Camp forum — threads', { tag: '@create' }, () => {
   test.describe.configure({ retries: 2 });
 
   test('click "Start a Thread" opens the threads list', async ({ topicPage, campPage, forumPage, page }) => {
@@ -105,7 +105,7 @@ test.describe('Camp forum — threads', () => {
   }
 });
 
-test.describe('News feed', () => {
+test.describe('News feed', { tag: '@create' }, () => {
   test.describe.configure({ retries: 1 });
 
   test('load add news page', async ({ topicPage, newsPage, page }) => {

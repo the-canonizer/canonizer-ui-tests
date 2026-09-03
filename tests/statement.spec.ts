@@ -14,7 +14,7 @@ async function seedCamp(topicPage: TopicPage, campPage: CampPage): Promise<void>
   await campPage.createCamp(`PW Camp ${uid()}`);
 }
 
-test.describe('Camp statements', () => {
+test.describe('Camp statements', { tag: '@create' }, () => {
   test.describe.configure({ retries: 1 });
 
   test('camp page shows the "Add Statement" button', async ({ topicPage, campPage, statementPage }) => {
