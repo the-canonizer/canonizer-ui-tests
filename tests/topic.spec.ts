@@ -9,7 +9,7 @@ import { test, expect, SIGNED_OUT, uid } from '../fixtures/test';
 
 const OLD_ASP_TOPIC_URL = 'https://ux-dev.canonizer.com/topic.asp/105';
 
-test.describe('Topics — create', () => {
+test.describe('Topics — create', { tag: '@create' }, () => {
   test('click create new topic page button', async ({ page }) => {
     await page.goto('/', { waitUntil: 'domcontentloaded' });
     await page.locator('#create-topic-link').first().click();
@@ -97,7 +97,7 @@ test.describe('Topics — create', () => {
   });
 });
 
-test.describe('Topics — history & update', () => {
+test.describe('Topics — history & update', { tag: '@create' }, () => {
   test('load topic history page', async ({ topicPage }) => {
     const slug = await topicPage.createTopic(`PW Hist ${uid()}`);
     await topicPage.openHistory(slug);
@@ -146,17 +146,35 @@ test.describe('Topics — history & update', () => {
     test.fixme(true, 'The redesigned update page has no Preview button.');
   });
 
-  test('compare topic versions', async ({ topicPage }) => {
-    test.fixme(true, 'Compare needs 2+ live versions; a freshly created topic has one. Needs a seeded topic.');
+  test('compare topic versions', async ({ topicPage, page }) => {
+    const slug = await topicPage.createTopic(`PW Cmp ${uid()}`);
+    await topicPage.makeSecondVersion(slug, `PW Cmp ${uid()} v2`);
+    await topicPage.openCompare(slug);
+    await expect(page).toHaveURL(/\/topic\/compare\//);
   });
-  test('topic comparison agreement link', async ({ topicPage }) => {
-    test.fixme(true, 'Depends on the compare flow (needs a seeded multi-version topic).');
+
+  test('topic comparison — agreement (topic) link', async ({ topicPage, page }) => {
+    const slug = await topicPage.createTopic(`PW CmpA ${uid()}`);
+    await topicPage.makeSecondVersion(slug, `PW CmpA ${uid()} v2`);
+    await topicPage.openCompare(slug);
+    await topicPage.comparisonBreadcrumbTopicLink().click();
+    await expect(page).toHaveURL(/1-Agreement/);
   });
-  test('topic comparison create topic button', async ({ topicPage }) => {
-    test.fixme(true, 'Depends on the compare flow (needs a seeded multi-version topic).');
+
+  test('topic comparison — start a topic', async ({ topicPage, page }) => {
+    const slug = await topicPage.createTopic(`PW CmpC ${uid()}`);
+    await topicPage.makeSecondVersion(slug, `PW CmpC ${uid()} v2`);
+    await topicPage.openCompare(slug);
+    await topicPage.startATopicLink().click();
+    await expect(page).toHaveURL(/\/create\/topic/);
   });
-  test('topic comparison back button', async ({ topicPage }) => {
-    test.fixme(true, 'Depends on the compare flow (needs a seeded multi-version topic).');
+
+  test('topic comparison — back returns to history', async ({ topicPage, page }) => {
+    const slug = await topicPage.createTopic(`PW CmpB ${uid()}`);
+    await topicPage.makeSecondVersion(slug, `PW CmpB ${uid()} v2`);
+    await topicPage.openCompare(slug);
+    await page.goBack({ waitUntil: 'commit' });
+    await expect(page).toHaveURL(/\/topic\/history\//);
   });
 
   test('topic history — view this version', async ({ topicPage, page }) => {

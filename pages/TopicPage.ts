@@ -18,8 +18,13 @@ export class TopicPage extends BasePage {
   readonly historyHeading = (): Locator => this.page.getByRole('button', { name: /topic history/i });
   readonly editBasedOnThis = (): Locator => this.page.getByRole('button', { name: /edit based on this/i });
   readonly viewThisVersion = (): Locator => this.page.getByRole('link', { name: /view this version/i });
-  readonly compareCheckboxes = (): Locator => this.page.getByRole('checkbox', { name: /select to compare/i });
-  readonly compareButton = (): Locator => this.page.getByRole('button', { name: /compare topics/i });
+  readonly compareCheckboxes = (): Locator => this.page.locator('input[type="checkbox"]');
+  readonly compareButton = (): Locator => this.page.getByRole('button', { name: /compare/i });
+
+  // compare page
+  readonly comparisonBreadcrumbTopicLink = (): Locator =>
+    this.page.locator('main').getByRole('link').first();
+  readonly startATopicLink = (): Locator => this.page.getByRole('link', { name: /start a topic/i });
 
   async openCreate(): Promise<void> {
     await this.goto('/create/topic');
@@ -49,5 +54,31 @@ export class TopicPage extends BasePage {
     await this.editBasedOnThis().click();
     await this.page.waitForURL(/\/manage\/topic\//, { timeout: 20_000, waitUntil: 'commit' });
     await expect(this.nameInput()).toBeVisible();
+  }
+
+  /** Publish a second version of an existing topic (needed for the compare flow). */
+  async makeSecondVersion(slug: string, newName: string): Promise<void> {
+    await this.openEdit(slug);
+    await this.nameInput().fill(newName);
+    await this.editSummary().fill('automated v2');
+    await expect(this.saveButton()).toBeEnabled();
+    await this.saveButton().click();
+    await this.page.waitForURL(/\/topic\/(history\/|[^/]+\/1-Agreement)/, {
+      timeout: 45_000,
+      waitUntil: 'commit',
+    });
+  }
+
+  /** From a topic that has 2+ versions: history page → tick the first two
+   *  version checkboxes → Compare → lands on /topic/compare/... */
+  async openCompare(slug: string): Promise<void> {
+    await this.openHistory(slug);
+    const cbs = this.compareCheckboxes();
+    await expect(cbs.nth(1)).toBeAttached({ timeout: 15_000 });
+    await cbs.nth(0).check({ force: true });
+    await cbs.nth(1).check({ force: true });
+    await expect(this.compareButton()).toBeEnabled();
+    await this.compareButton().click();
+    await this.page.waitForURL(/\/topic\/compare\//, { timeout: 30_000, waitUntil: 'commit' });
   }
 }
