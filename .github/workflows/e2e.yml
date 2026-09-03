@@ -1,9 +1,8 @@
 name: e2e
 
 on:
-  push:
-    branches: [master, main]
-  pull_request:
+  # Manual only — run from the Actions tab ("Run workflow"). No auto-run on
+  # push/PR: the suite hits the shared ux-dev environment and is noisy there.
   workflow_dispatch:
 
 jobs:

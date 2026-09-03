@@ -424,8 +424,11 @@ the upload tests.
 
 ## 12. Continuous integration
 
-[`.github/workflows/e2e.yml`](.github/workflows/e2e.yml) runs on **push to
-`master`/`main`**, **pull requests**, and **manual dispatch**.
+[`.github/workflows/e2e.yml`](.github/workflows/e2e.yml) is **manual only** —
+trigger it from the repo's **Actions** tab → *e2e* → **Run workflow**. It does
+not run automatically on push or PR (the suite exercises the shared ux-dev
+environment and is noisy there). Re-add a `push:` / `pull_request:` trigger to
+the workflow if you want that later.
 
 - Node from `.nvmrc`, `npm ci`, `npx playwright install --with-deps chromium`.
 - **4-way sharded matrix** (`--shard=1/4 … 4/4`), `fail-fast: false`.
